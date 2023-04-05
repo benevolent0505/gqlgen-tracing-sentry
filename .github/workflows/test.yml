@@ -11,7 +11,7 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v3
-      - name: actions/setup-go@v3
+      - uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
       - run: go mod download && go test -race ./sentrytracing

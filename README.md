@@ -4,6 +4,12 @@
 
 [Sentry](https://sentry.io) Tracer for [gqlgen](https://gqlgen.com/)
 
+## Installation
+
+```sh
+$ go get github.com/benevolent0505/gqlgen-tracing-sentry@latest`
+```
+
 ## Usage
 
 ```go

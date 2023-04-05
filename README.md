@@ -1,4 +1,6 @@
-# gqlgen-tracing-sentry ![Test](https://github.com/benevolent0505/gqlgen-sentry-tracing/.github/workflows/test.yml/badge.svg)
+# gqlgen-tracing-sentry
+
+[![Test](https://github.com/benevolent0505/gqlgen-tracing-sentry/actions/workflows/test.yml/badge.svg)](https://github.com/benevolent0505/gqlgen-tracing-sentry/actions/workflows/test.yml)
 
 [Sentry](https://sentry.io) Tracer for [gqlgen](https://gqlgen.com/)
 

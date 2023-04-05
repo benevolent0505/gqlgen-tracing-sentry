@@ -1,4 +1,4 @@
-package tracer
+package sentrytracing
 
 import (
 	"context"
@@ -49,10 +49,12 @@ func (t Tracer) InterceptField(ctx context.Context, next graphql.Resolver) (inte
 	)
 	defer span.Finish()
 
-	span.Description = fc.Field.ObjectDefinition.Name + "." + fc.Field.Name
+	if fc.Field.ObjectDefinition != nil {
+		span.Description = fc.Field.ObjectDefinition.Name + "." + fc.Field.Name
+		span.SetData("resolver.object", fc.Field.ObjectDefinition.Name)
+	}
 
 	span.SetData("resolver.path", fc.Path().String())
-	span.SetData("resolver.object", fc.Field.ObjectDefinition.Name)
 	span.SetData("resolver.field", fc.Field.Name)
 	span.SetData("resolver.alias", fc.Field.Alias)
 

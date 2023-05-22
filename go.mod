@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/99designs/gqlgen v0.17.30
 	github.com/getsentry/sentry-go v0.19.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	github.com/vektah/gqlparser/v2 v2.5.1
 )
 

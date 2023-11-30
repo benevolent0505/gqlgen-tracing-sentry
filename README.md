@@ -7,7 +7,7 @@
 ## Installation
 
 ```sh
-$ go get github.com/benevolent0505/gqlgen-tracing-sentry@latest
+go get github.com/benevolent0505/gqlgen-tracing-sentry@latest
 ```
 
 ## Usage

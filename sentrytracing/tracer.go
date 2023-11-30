@@ -32,7 +32,7 @@ func (t Tracer) InterceptResponse(
 	span := sentry.StartTransaction(
 		ctx,
 		operationName(rc),
-		sentry.OpName("gql"),
+		sentry.WithOpName("gql"),
 	)
 	defer span.Finish()
 

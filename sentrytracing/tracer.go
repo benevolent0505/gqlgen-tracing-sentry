@@ -33,6 +33,10 @@ func (t Tracer) InterceptResponse(
 		ctx,
 		operationName(rc),
 		sentry.WithOpName("gql"),
+		sentry.ContinueFromHeaders(
+			rc.Headers.Get(sentry.SentryTraceHeader),
+			rc.Headers.Get(sentry.SentryBaggageHeader),
+		),
 	)
 	defer span.Finish()
 

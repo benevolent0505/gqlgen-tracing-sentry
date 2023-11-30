@@ -23,12 +23,15 @@ func (t Tracer) Validate(graphql.ExecutableSchema) error {
 	return nil
 }
 
-func (t Tracer) InterceptResponse(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+func (t Tracer) InterceptResponse(
+	ctx context.Context,
+	next graphql.ResponseHandler,
+) *graphql.Response {
 	rc := graphql.GetOperationContext(ctx)
 
 	span := sentry.StartTransaction(
 		ctx,
-		operatioName(rc),
+		operationName(rc),
 		sentry.OpName("gql"),
 	)
 	defer span.Finish()
@@ -63,7 +66,7 @@ func (t Tracer) InterceptField(ctx context.Context, next graphql.Resolver) (inte
 	return next(sctx)
 }
 
-func operatioName(rc *graphql.OperationContext) string {
+func operationName(rc *graphql.OperationContext) string {
 	requestName := "nameless-operation"
 	if rc.Doc != nil && len(rc.Doc.Operations) != 0 {
 		op := rc.Doc.Operations[0]

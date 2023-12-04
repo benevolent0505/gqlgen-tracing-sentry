@@ -9,10 +9,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler/testserver"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/benevolent0505/gqlgen-tracing-sentry/sentrytracing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/vektah/gqlparser/v2/gqlerror"
+
+	"github.com/benevolent0505/gqlgen-tracing-sentry/sentrytracing"
 )
 
 func Test_NoError(t *testing.T) {
@@ -31,7 +32,6 @@ func Test_NoError(t *testing.T) {
 		Errors gqlerror.List
 	}
 	require.NoError(t, json.Unmarshal(resp.Body.Bytes(), &respData))
-
 }
 
 func doRequest(handler http.Handler, method, target, body string) *httptest.ResponseRecorder {

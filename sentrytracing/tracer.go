@@ -23,30 +23,32 @@ func (t Tracer) Validate(graphql.ExecutableSchema) error {
 	return nil
 }
 
-func (t Tracer) InterceptResponse(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+func (t Tracer) InterceptResponse(
+	ctx context.Context,
+	next graphql.ResponseHandler,
+) *graphql.Response {
 	rc := graphql.GetOperationContext(ctx)
 
 	span := sentry.StartTransaction(
 		ctx,
-		operatioName(rc),
-		sentry.OpName("gql"),
+		operationName(rc),
+		sentry.WithOpName("gql"),
+		sentry.ContinueFromHeaders(
+			rc.Headers.Get(sentry.SentryTraceHeader),
+			rc.Headers.Get(sentry.SentryBaggageHeader),
+		),
 	)
 	defer span.Finish()
 
 	span.SetData("request.query", rc.RawQuery)
 
-	sctx := span.Context()
-
-	return next(sctx)
+	return next(span.Context())
 }
 
 func (t Tracer) InterceptField(ctx context.Context, next graphql.Resolver) (interface{}, error) {
 	fc := graphql.GetFieldContext(ctx)
 
-	span := sentry.StartSpan(
-		ctx,
-		"resolver",
-	)
+	span := sentry.StartSpan(ctx, "resolver")
 	defer span.Finish()
 
 	if fc.Field.ObjectDefinition != nil {
@@ -58,18 +60,18 @@ func (t Tracer) InterceptField(ctx context.Context, next graphql.Resolver) (inte
 	span.SetData("resolver.field", fc.Field.Name)
 	span.SetData("resolver.alias", fc.Field.Alias)
 
-	sctx := span.Context()
-
-	return next(sctx)
+	return next(span.Context())
 }
 
-func operatioName(rc *graphql.OperationContext) string {
+func operationName(rc *graphql.OperationContext) string {
 	requestName := "nameless-operation"
-	if rc.Doc != nil && len(rc.Doc.Operations) != 0 {
-		op := rc.Doc.Operations[0]
-		if op.Name != "" {
-			requestName = op.Name
-		}
+	if rc.Doc == nil || len(rc.Doc.Operations) == 0 {
+		return requestName
+	}
+
+	op := rc.Doc.Operations[0]
+	if op.Name != "" {
+		requestName = op.Name
 	}
 
 	return requestName
